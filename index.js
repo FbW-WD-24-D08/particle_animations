@@ -15,6 +15,7 @@ class Particle{
         this.radius = 15;
     }
     draw(context){
+        context.fillStyle = 'red';
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         context.fill();
@@ -28,13 +29,21 @@ class Effect{
         this.height = this.canvas.height;
         this.particles = [];
         this.numberOfParticles = 20;
+        this.createParticles();
     }
     createParticles(){
         for (let i = 0; i < this.numberOfParticles; i++){
-            this.particles.push();
+            this.particles.push(new Particle(this));
         }
     }
+    handleParticles(context){
+        this.particles.forEach(particle => {
+            particle.draw(context);
+        });
+    }
 };
+const effect = new Effect(canvas);
+effect.handleParticles(ctx);
 
 function animate(){
 
