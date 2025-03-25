@@ -4,8 +4,11 @@
     box-sizing: border-box;
 }
 
+body{
+    background-color: black;
+}
+
 #canvas{
-    background: black;
     position: absolute;
     top: 0;
     left: 0;
