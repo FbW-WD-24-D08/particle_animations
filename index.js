@@ -4,6 +4,11 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 ctx.fillStyle = 'white';
 console.log(ctx);
+const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+gradient.addColorStop(0, 'white');
+gradient.addColorStop(0.5, 'magenta');
+gradient.addColorStop(1, 'blue');
+ctx.fillStyle = gradient; // instead of line 26
 
 // ctx.fillStyle = 'white';
 // ctx.fillRect(150, 150, 150, 200);
@@ -18,7 +23,7 @@ class Particle{
         this.vy = Math.random() * 4 - 2; // y for y-axsis
     }
     draw(context){
-        context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
+        // context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         context.fill();
