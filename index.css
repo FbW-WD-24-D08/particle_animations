@@ -13,3 +13,13 @@ body{
     top: 0;
     left: 0;
 }
+
+html, body {
+    overflow: hidden; /* Verhindert Scrollbalken */
+    width: 100%;
+    height: 100%;
+}
+
+canvas {
+    display: block; /* Verhindert zusätzliche Abstände */
+}

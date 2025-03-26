@@ -8,7 +8,7 @@ const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
 gradient.addColorStop(0, 'white');
 gradient.addColorStop(0.5, 'magenta');
 gradient.addColorStop(1, 'blue');
-ctx.fillStyle = gradient; // instead of line 26
+ctx.fillStyle = gradient;
 ctx.strokeStyle = 'white';
 
 // ctx.fillStyle = 'white';
@@ -20,8 +20,8 @@ class Particle{
         this.radius = Math.random() * 10 + 5;
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
         this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
-        this.vx = Math.random() * 1 - 0,5; // v stands for velocity, and one px per animation frame
-        this.vy = Math.random() * 1 - 0,5; // y for y-axsis
+        this.vx = Math.random() * 2 - 0.5; // v stands for velocity, and one px per animation frame
+        this.vy = Math.random() * 2 - 0.5; // y for y-axsis
     }
     draw(context){
         // context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
@@ -36,17 +36,26 @@ class Particle{
 
         this.y += this.vy;
         if(this.y > this.effect.height - this.radius || this.y < 0) this.vy *= -1; // let'em bounce on y-axisi
-    };
+    }
+    reset(){
+        this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
+        this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
+    }
 };
 
 class Effect{
-    constructor(canvas){
+    constructor(canvas, context){
         this.canvas = canvas;
+        this.context = context;
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.particles = [];
         this.numberOfParticles = 275;
         this.createParticles();
+
+        window.addEventListener('resize', e => {        // parent-scope needed
+            this.resize(e.target.window.innerWidth, e.target.window.innerHeight)
+        });
     }
     createParticles(){
         for (let i = 0; i < this.numberOfParticles; i++){
@@ -79,9 +88,24 @@ class Effect{
                 }
             }
         }
+    }
+    resize(width, height){
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.width = width;
+        this.height = height;
+        const gradient = this.context.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, 'white');
+        gradient.addColorStop(0.5, 'magenta');
+        gradient.addColorStop(1, 'blue');
+        this.context.fillStyle = gradient;
+        this.context.strokeStyle = 'white';
+        this.particles.forEach(particle => {
+            particle.reset();
+        });
     };
 };
-const effect = new Effect(canvas);
+const effect = new Effect(canvas, ctx);
 
 function animate(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
