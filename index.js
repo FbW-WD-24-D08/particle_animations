@@ -9,6 +9,7 @@ gradient.addColorStop(0, 'white');
 gradient.addColorStop(0.5, 'magenta');
 gradient.addColorStop(1, 'blue');
 ctx.fillStyle = gradient; // instead of line 26
+ctx.strokeStyle = 'white';
 
 // ctx.fillStyle = 'white';
 // ctx.fillRect(150, 150, 150, 200);
@@ -53,11 +54,28 @@ class Effect{
         }
     }
     handleParticles(context){
+        this.connectParticles(context)
         this.particles.forEach(particle => {
             particle.draw(context);
             particle.update();
         });
     }
+    connectParticles(context){
+        const maxDistance = 100;
+        for (let i = 0; i < this.particles.length; i++){
+            for (let j = i; j < this.particles.length; j++){
+                const dx = this.particles[i].x - this.particles[j].x;
+                const dy = this.particles[i].y - this.particles[j].y;
+                const distance = Math.hypot(dx, dy); // Pythargoras Theorem Formula Of Distance: Squareroot of dx² + dy² // C² = A² + B²
+                if(distance < maxDistance){
+                    context.beginPath();
+                    context.moveTo(this.particles[i].x, this.particles[i].y);
+                    context.lineTo(this.particles[j].x, this.particles[j].y);
+                    context.stroke();
+                }
+            }
+        }
+    };
 };
 const effect = new Effect(canvas);
 
