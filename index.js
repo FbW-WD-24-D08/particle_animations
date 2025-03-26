@@ -68,10 +68,14 @@ class Effect{
                 const dy = this.particles[i].y - this.particles[j].y;
                 const distance = Math.hypot(dx, dy); // Pythargoras Theorem Formula Of Distance: Squareroot of dx² + dy² // C² = A² + B²
                 if(distance < maxDistance){
+                    context.save();
+                    const opacity = 1 - (distance/maxDistance);
+                    context.globalAlpha = opacity;
                     context.beginPath();
                     context.moveTo(this.particles[i].x, this.particles[i].y);
                     context.lineTo(this.particles[j].x, this.particles[j].y);
                     context.stroke();
+                    context.restore();
                 }
             }
         }
