@@ -16,11 +16,11 @@ ctx.fillStyle = gradient; // instead of line 26
 class Particle{
     constructor(effect){
         this.effect = effect;
-        this.radius = Math.random() * 15;
+        this.radius = Math.random() * 10 + 5;
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
         this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
-        this.vx = Math.random() * 4 - 2; // v stands for velocity, and one px per animation frame
-        this.vy = Math.random() * 4 - 2; // y for y-axsis
+        this.vx = Math.random() * 1 - 0,5; // v stands for velocity, and one px per animation frame
+        this.vy = Math.random() * 1 - 0,5; // y for y-axsis
     }
     draw(context){
         // context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
