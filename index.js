@@ -14,6 +14,7 @@ class Particle{
         this.radius = Math.random() * 15;
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
         this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
+        this.vx = 1; // v stands for velocity, and one px per animation frame
         
     }
     draw(context){
@@ -23,6 +24,10 @@ class Particle{
         context.fill();
         context.stroke();
     }
+    update(){
+        this.x += this.vx;
+        if(this.x > this.effect.width|| this.x < 0) this.vx *= -1;
+    };
 };
 
 class Effect{
@@ -42,12 +47,15 @@ class Effect{
     handleParticles(context){
         this.particles.forEach(particle => {
             particle.draw(context);
+            particle.update();
         });
     }
 };
 const effect = new Effect(canvas);
-effect.handleParticles(ctx);
 
 function animate(){
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    effect.handleParticles(ctx);
+    requestAnimationFrame(animate);
 };
+animate();
