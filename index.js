@@ -6,8 +6,8 @@ ctx.fillStyle = 'white';
 console.log(ctx);
 const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
 gradient.addColorStop(0, 'white');
-gradient.addColorStop(0.5, 'magenta');
-gradient.addColorStop(1, 'blue');
+gradient.addColorStop(0.5, 'gold');
+gradient.addColorStop(1, 'orangered');
 ctx.fillStyle = gradient;
 ctx.strokeStyle = 'white';
 
@@ -17,11 +17,13 @@ ctx.strokeStyle = 'white';
 class Particle{
     constructor(effect){
         this.effect = effect;
-        this.radius = Math.random() * 10 + 5;
+        this.radius = 7; // Math.random() * 10 + 5
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
         this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
         this.vx = Math.random() * 2 - 0.5; // v stands for velocity, and one px per animation frame
         this.vy = Math.random() * 2 - 0.5; // y for y-axsis
+        this.pushX = 0;
+        this.pushY = 0;
     }
     draw(context){
         // context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
@@ -35,11 +37,11 @@ class Particle{
             const dx = this.x - this.effect.mouse.x;
             const dy = this.y - this.effect.mouse.y;
             const distance = Math.hypot(dx, dy);
-            const force = this.effect.mouse.radius / distance;
+            const force = (this.effect.mouse.radius / distance);
             if(distance < this.effect.mouse.radius){
                 const angle = Math.atan2(dy, dx);
-                this.x += Math.cos(angle);
-                this.y += Math.sin(angle);
+                this.x += Math.cos(angle) * force;
+                this.y += Math.sin(angle) * force;
             }
         }
         if(this.x < this.radius){
@@ -87,7 +89,7 @@ class Effect{
             x: 0,
             y: 0,
             pressed: false,
-            radius: 200
+            radius: 150
         }
 
         window.addEventListener('resize', e => {        // parent-scope needed
@@ -122,7 +124,7 @@ class Effect{
         });
     }
     connectParticles(context){
-        const maxDistance = 100;
+        const maxDistance = 120;
         for (let i = 0; i < this.particles.length; i++){
             for (let j = i; j < this.particles.length; j++){
                 const dx = this.particles[i].x - this.particles[j].x;
@@ -148,8 +150,8 @@ class Effect{
         this.height = height;
         const gradient = this.context.createLinearGradient(0, 0, width, height);
         gradient.addColorStop(0, 'white');
-        gradient.addColorStop(0.5, 'magenta');
-        gradient.addColorStop(1, 'blue');
+        gradient.addColorStop(0.5, 'gold');
+        gradient.addColorStop(1, 'orangered');
         this.context.fillStyle = gradient;
         this.context.strokeStyle = 'white';
         this.particles.forEach(particle => {
