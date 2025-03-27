@@ -45,6 +45,8 @@ class Particle{
                 this.pushY += Math.sin(angle) * force;
             }
         }
+        this.x += (this.pushX *= this.friction) + this.vx;
+        this.y += (this.pushY *= this.friction) + this.vy;
         if(this.x < this.radius){
             this.x = this.radius;
             this.vx *= -1;
@@ -59,9 +61,6 @@ class Particle{
                 this.y = this.effect.height - this.radius;
                 this.vy *= -1;
         }
-        this.x += (this.pushX *= this.friction) + this.vx;
-        this.y += (this.pushY *= this.friction) + this.vy;
-
     }
     reset(){
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
