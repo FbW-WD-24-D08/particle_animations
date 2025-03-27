@@ -24,6 +24,7 @@ class Particle{
         this.vy = Math.random() * 2 - 0.5; // y for y-axsis
         this.pushX = 0;
         this.pushY = 0;
+        this.friction = 0.95;
     }
     draw(context){
         // context.fillStyle = 'hsl(' + this.x * 0.5 + ' , 100%, 50%)';
@@ -40,8 +41,8 @@ class Particle{
             const force = (this.effect.mouse.radius / distance);
             if(distance < this.effect.mouse.radius){
                 const angle = Math.atan2(dy, dx);
-                this.x += Math.cos(angle) * force;
-                this.y += Math.sin(angle) * force;
+                this.pushX += Math.cos(angle) * force;
+                this.pushY += Math.sin(angle) * force;
             }
         }
         if(this.x < this.radius){
@@ -58,15 +59,8 @@ class Particle{
                 this.y = this.effect.height - this.radius;
                 this.vy *= -1;
         }
-
-        /*this.x += this.vx;
-        if(this.x > this.effect.width - this.radius || this.x < 0) this.vx *= -1; // let'em bounce on x-axisi
-
-        this.y += this.vy;
-        if(this.y > this.effect.height - this.radius || this.y < 0) this.vy *= -1;  */ // let'em bounce on y-axisi
-
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += (this.pushX *= this.friction) + this.vx;
+        this.y += (this.pushY *= this.friction) + this.vy;
 
     }
     reset(){
@@ -82,7 +76,7 @@ class Effect{
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.particles = [];
-        this.numberOfParticles = 275;
+        this.numberOfParticles = 400;
         this.createParticles();
 
         this.mouse = {
