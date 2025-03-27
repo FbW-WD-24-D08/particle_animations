@@ -31,11 +31,41 @@ class Particle{
         context.stroke();
     }
     update(){
-        this.x += this.vx;
+        if(this.effect.mouse.pressed){
+            const dx = this.x - this.effect.mouse.x;
+            const dy = this.y - this.effect.mouse.y;
+            const distance = Math.hypot(dx, dy);
+            const force = this.effect.mouse.radius / distance;
+            if(distance < this.effect.mouse.radius){
+                const angle = Math.atan2(dy, dx);
+                this.x += Math.cos(angle);
+                this.y += Math.sin(angle);
+            }
+        }
+        if(this.x < this.radius){
+            this.x = this.radius;
+            this.vx *= -1;
+        } else if (this.x > this.effect.width - this.radius){
+                this.x = this.effect.width - this.radius;
+                this.vx *= -1;
+        }
+        if(this.y < this.radius){
+            this.y = this.radius;
+            this.vy *= -1;
+        } else if (this.y > this.effect.height - this.radius){
+                this.y = this.effect.height - this.radius;
+                this.vy *= -1;
+        }
+
+        /*this.x += this.vx;
         if(this.x > this.effect.width - this.radius || this.x < 0) this.vx *= -1; // let'em bounce on x-axisi
 
         this.y += this.vy;
-        if(this.y > this.effect.height - this.radius || this.y < 0) this.vy *= -1; // let'em bounce on y-axisi
+        if(this.y > this.effect.height - this.radius || this.y < 0) this.vy *= -1;  */ // let'em bounce on y-axisi
+
+        this.x += this.vx;
+        this.y += this.vy;
+
     }
     reset(){
         this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
@@ -53,8 +83,30 @@ class Effect{
         this.numberOfParticles = 275;
         this.createParticles();
 
+        this.mouse = {
+            x: 0,
+            y: 0,
+            pressed: false,
+            radius: 200
+        }
+
         window.addEventListener('resize', e => {        // parent-scope needed
             this.resize(e.target.window.innerWidth, e.target.window.innerHeight)
+        });
+        window.addEventListener('mousemove', e => {
+            if(this.mouse.pressed){
+                this.mouse.x = e.x;
+                this.mouse.y = e.y;
+            }
+        });
+        window.addEventListener('mousedown', e => {
+            this.mouse.pressed = true;
+            this.mouse.x = e.x;
+            this.mouse.y = e.y;
+        });
+        window.addEventListener('mouseup', e => {
+            this.mouse.pressed = false;
+
         });
     }
     createParticles(){
